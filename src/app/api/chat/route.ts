@@ -32,30 +32,10 @@ export async function POST(req: NextRequest) {
         const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
         const currentMessageContent = messages[messages.length - 1].content;
         const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-        /**
-         * You can also try e.g.:
-         *
-         * import { ChatAnthropic } from "langchain/chat_models/anthropic";
-         * const model = new ChatAnthropic({});
-         *
-         * See a full list of supported models at:
-         * https://js.langchain.com/docs/modules/model_io/models/
-         */
         const model = new ChatOpenAI({
             temperature: 0.8,
         });
-        /**
-         * Chat models stream message chunks rather than bytes, so this
-         * output parser handles serialization and byte-encoding.
-         */
         const outputParser = new BytesOutputParser();
-
-        /**
-         * Can also initialize as:
-         *
-         * import { RunnableSequence } from "langchain/schema/runnable";
-         * const chain = RunnableSequence.from([prompt, model, outputParser]);
-         */
         const chain = prompt.pipe(model).pipe(outputParser);
 
         const stream = await chain.stream({
