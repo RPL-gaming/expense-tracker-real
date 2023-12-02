@@ -89,7 +89,7 @@ const AdvisorDetailPage = () => {
 
     // Send a request to the backend to log the transaction
     try {
-      const response = await fetch('/api/log-transaction', {
+      const response = await fetch('/api/log/transaction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
