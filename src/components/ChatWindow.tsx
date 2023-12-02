@@ -33,11 +33,9 @@ export function ChatWindow(props: {
     const {
         messages,
         input,
-        setInput,
         handleInputChange,
         handleSubmit,
         isLoading: chatEndpointIsLoading,
-        setMessages,
     } = useChat({
         api: endpoint,
         onResponse(response) {
