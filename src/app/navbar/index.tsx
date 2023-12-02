@@ -22,6 +22,9 @@ function navbar () {
         </div>
         <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1 flex items-center gap-5">
+            <Link href={'/expenses/view'} >
+                <li className='hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2'>Dashboard</li>
+            </Link>
             <Link href={'/expenses/add'} >
                 <li className='hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2'>Add Expense</li>
             </Link>
