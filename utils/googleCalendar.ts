@@ -2,19 +2,17 @@ import fs from "fs";
 import { google, calendar_v3 } from "googleapis";
 
 const TOKEN_PATH = "token.json";
-const CREDENTIALS_PATH = "credentials.json";
 
 /**
  * Authenticate with Google Calendar API
  * @returns {Promise<calendar_v3.Calendar>} Authenticated Google Calendar API client
  */
 async function authenticate(): Promise<calendar_v3.Calendar> {
-  if (!fs.existsSync(CREDENTIALS_PATH)) {
-    throw new Error("Credential file not found");
-  }
-
-  const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, "utf8"));
-  const { client_secret, client_id, redirect_uris } = credentials.web;
+  const { client_secret, client_id, redirect_uris } = {
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uris: [process.env.GOOGLE_REDIRECT_URIS],
+  };
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
