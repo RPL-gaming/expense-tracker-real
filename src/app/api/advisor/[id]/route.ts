@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
   try {
     const advisor = await prisma.financialAdvisor.findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
       },
     });
 

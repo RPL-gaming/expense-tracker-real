@@ -68,6 +68,7 @@ const AdvisorDetailPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          advisorId: advisor?.id,
           advisorEmail: advisor?.email,
           advisorName: advisor?.name,
         }),
@@ -89,10 +90,10 @@ const AdvisorDetailPage = () => {
 
     // Send a request to the backend to log the transaction
     try {
-      const response = await fetch('/api/log/transaction', {
-        method: 'POST',
+      const response = await fetch("/api/log/transaction", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           amount: advisor?.ratePerHour,
@@ -101,12 +102,12 @@ const AdvisorDetailPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to log transaction');
+        throw new Error("Failed to log transaction");
       }
 
       handleCreateMeeting();
     } catch (error) {
-      console.error('Error logging transaction:', error);
+      console.error("Error logging transaction:", error);
     }
   };
 
