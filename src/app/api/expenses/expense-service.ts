@@ -28,8 +28,10 @@ class ExpenseService {
             );
         }
 
-        const { amount, date, category, description } = await req.json();
-        const userId = decoded.id;
+
+    const { amount, date, category, description } = await req.json();
+    const userId = decoded.id;
+
 
         // Validate data before saving
         if (!amount || !date || !category || !userId) {
@@ -39,16 +41,18 @@ class ExpenseService {
             );
         }
 
-        try {
-            const newExpense = await prisma.expense.create({
-                data: {
-                    amount: parseFloat(amount),
-                    date: new Date(date),
-                    category,
-                    description,
-                    userId: userId,
-                },
-            });
+
+    try {
+      const newExpense = await prisma.expense.create({
+        data: {
+          amount: parseFloat(amount),
+          date: new Date(date),
+          category,
+          description,
+          userId: userId,
+        },
+      });
+
 
             return NextResponse.json(newExpense);
         } catch (error) {
