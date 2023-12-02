@@ -28,10 +28,8 @@ class ExpenseService {
             );
         }
 
-
-    const { amount, date, category, description } = await req.json();
-    const userId = decoded.id;
-
+        const { amount, date, category, description } = await req.json();
+        const userId = decoded.id;
 
         // Validate data before saving
         if (!amount || !date || !category || !userId) {
@@ -41,18 +39,16 @@ class ExpenseService {
             );
         }
 
-
-    try {
-      const newExpense = await prisma.expense.create({
-        data: {
-          amount: parseFloat(amount),
-          date: new Date(date),
-          category,
-          description,
-          userId: userId,
-        },
-      });
-
+        try {
+            const newExpense = await prisma.expense.create({
+                data: {
+                    amount: parseFloat(amount),
+                    date: new Date(date),
+                    category,
+                    description,
+                    userId: userId,
+                },
+            });
 
             return NextResponse.json(newExpense);
         } catch (error) {
@@ -104,7 +100,7 @@ class ExpenseService {
         try {
             const updatedExpense = await prisma.expense.update({
                 where: {
-                    id: parseInt(expenseId),
+                    id: expenseId,
                 },
                 data: {
                     amount: parseFloat(amount),
@@ -155,7 +151,7 @@ class ExpenseService {
         try {
             const getExpense = await prisma.expense.findUnique({
                 where: {
-                    id: parseInt(expenseId),
+                    id: expenseId,
                 },
             });
 
