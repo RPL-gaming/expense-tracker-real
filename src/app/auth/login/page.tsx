@@ -27,7 +27,7 @@ const LoginPage = () => {
     if (response.ok) {
       setIsLoginStatus(true);
       // delay redirect to allow for success alert to show
-      setTimeout(() => (window.location.href = "/"), 1000);
+      setTimeout(() => (window.location.href = "/expenses/view"), 1000);
     } else {
       setIsLoginStatus(false);
     }
