@@ -84,13 +84,36 @@ const AdvisorDetailPage = () => {
     }
   };
 
+  const handleSuccessfulPayment = async (result: any) => {
+    console.log("payment success", result);
+
+    // Send a request to the backend to log the transaction
+    try {
+      const response = await fetch('/api/log-transaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: advisor?.ratePerHour,
+          advisorId: advisor?.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to log transaction');
+      }
+
+      handleCreateMeeting();
+    } catch (error) {
+      console.error('Error logging transaction:', error);
+    }
+  };
+
   useEffect(() => {
     if (transactionToken) {
       window.snap.pay(transactionToken, {
-        onSuccess: function (result: any) {
-          console.log("payment success", result);
-          handleCreateMeeting();
-        },
+        onSuccess: handleSuccessfulPayment,
         onPending: function (result: any) {
           console.log("payment pending", result);
         },
