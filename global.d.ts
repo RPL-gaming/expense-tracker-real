@@ -1,7 +1,7 @@
 interface Snap {
-    pay: (transactionToken: string, options: any) => void;
+  pay: (transactionToken: string, options: any) => void;
 }
 
 interface Window {
-    snap: Snap;
+  snap: Snap;
 }
