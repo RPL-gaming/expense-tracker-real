@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 import { isTokenValid } from "../../../../../utils/auth/is-token-valid";
 
-// GET /api/advisor/[id] (get advisor by ID)
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   // Handle authentication
   const token = req.cookies.get("token")?.value;
   let decoded;
@@ -18,25 +17,23 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invalid token" }, { status: 403 });
   }
 
-  const id = req.nextUrl.pathname.split("/").at(-1);
+  const { advisorId, amount } = await req.json();
 
-  if (!id) {
-    return NextResponse.json({ error: "No ID provided" }, { status: 400 });
-  }
-
-  // Fetch advisor
   try {
-    const advisor = await prisma.financialAdvisor.findUnique({
-      where: {
-        id: id,
+    const newTransaction = await prisma.transaction.create({
+      data: {
+        amount: amount,
+        status: "successful",
+        advisorId: advisorId,
+        userId: decoded.id,
       },
     });
 
-    return NextResponse.json(advisor);
+    return NextResponse.json(newTransaction);
   } catch (error) {
-    console.error(error);
+    console.error("Error creating transaction:", error);
     return NextResponse.json(
-      { error: "An error occurred while fetching the advisor" },
+      { error: "Error creating transaction" },
       { status: 500 },
     );
   }
