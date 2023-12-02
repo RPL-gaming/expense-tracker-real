@@ -3,6 +3,7 @@ import { isTokenValid } from "../../../../utils/auth/is-token-valid";
 import prisma from "../../../../lib/prisma";
 
 class ExpenseService {
+
     async addExpense(req: NextRequest) {
         if (req.headers.get("content-type") !== "application/json") {
             return NextResponse.json(
@@ -28,8 +29,10 @@ class ExpenseService {
             );
         }
 
-        const { amount, date, category, description } = await req.json();
-        const userId = decoded.id;
+
+    const { amount, date, category, description } = await req.json();
+    const userId = decoded.id;
+
 
         // Validate data before saving
         if (!amount || !date || !category || !userId) {
@@ -39,16 +42,18 @@ class ExpenseService {
             );
         }
 
-        try {
-            const newExpense = await prisma.expense.create({
-                data: {
-                    amount: parseFloat(amount),
-                    date: new Date(date),
-                    category,
-                    description,
-                    userId: userId,
-                },
-            });
+
+    try {
+      const newExpense = await prisma.expense.create({
+        data: {
+          amount: parseFloat(amount),
+          date: new Date(date),
+          category,
+          description,
+          userId: userId,
+        },
+      });
+
 
             return NextResponse.json(newExpense);
         } catch (error) {
@@ -172,7 +177,9 @@ class ExpenseService {
                 { status: 500 }
             );
         }
+
     }
+  }
 }
 
 export default ExpenseService;
