@@ -52,8 +52,7 @@ model FinancialAdvisor {
 
 model Appointment {
   id        Int              @id @default(autoincrement())
-  date      DateTime
-  time      DateTime
+  dateTime  DateTime
   userId    String
   advisorId Int
   advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
