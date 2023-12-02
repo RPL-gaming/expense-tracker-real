@@ -9,12 +9,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(cuid())
-  email    String?   @unique
-  password String
-  username String    @unique
-  Budget   Budget?
-  expenses Expense[]
+  id           String        @id @default(cuid())
+  email        String?       @unique
+  password     String
+  username     String        @unique
+  budget       Budget?
+  expenses     Expense[]
+  appointments Appointment[]
+  transactions Transaction[]
 
   @@map("users")
 }
@@ -35,4 +37,43 @@ model Budget {
   userId String   @unique
   date   DateTime
   users  User     @relation(fields: [userId], references: [id])
+}
+
+model FinancialAdvisor {
+  id                 Int           @id @default(autoincrement())
+  name               String
+  specialties        String[]
+  email              String        @unique
+  ratePerHour        Float
+  appointments       Appointment[]
+  availableSchedules Schedule[]
+  transactions       Transaction[]
+}
+
+model Appointment {
+  id        Int              @id @default(autoincrement())
+  date      DateTime
+  time      DateTime
+  userId    String
+  advisorId Int
+  advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
+}
+
+model Schedule {
+  id        Int              @id @default(autoincrement())
+  date      DateTime
+  time      DateTime
+  advisorId Int
+  advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
+}
+
+model Transaction {
+  id        Int              @id @default(autoincrement())
+  amount    Float
+  status    String
+  userId    String
+  advisorId Int
+  advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
 }
