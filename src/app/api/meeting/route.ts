@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       customer_email,
       advisor_email,
       advisor_name,
-        schedule,
+      schedule,
     );
     if (meetUrl) {
       const newAppointment = await prisma.appointment.create({
@@ -43,10 +43,7 @@ export async function POST(req: NextRequest) {
 
       await prisma.schedule.deleteMany({
         where: {
-          AND: [
-            { id: body.scheduleId },
-            { advisorId: body.advisorId },
-          ],
+          AND: [{ id: body.scheduleId }, { advisorId: body.advisorId }],
         },
       });
 

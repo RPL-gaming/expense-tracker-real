@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
       },
       include: {
         availableSchedules: true,
-      }
+      },
     });
 
     return NextResponse.json(advisor);
