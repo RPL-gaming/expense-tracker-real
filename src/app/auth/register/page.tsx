@@ -5,6 +5,11 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdvisor, setIsAdvisor] = useState(false);
+  const [name, setName] = useState("");
+  const [specialities, setSpecialities] = useState("");
+  const [ratePerHour, setRatePerHour] = useState(0);
+  const [yearsOfExperience, setYearsOfExperience] = useState(0);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -18,6 +23,26 @@ const RegisterPage = () => {
     setPassword(event.target.value);
   };
 
+  const handleUserTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsAdvisor(event.target.value === "Financial Advisor");
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  const handleSpecialitiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSpecialities(event.target.value);
+  };
+
+  const handleRatePerHourChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRatePerHour(parseFloat(event.target.value));
+  };
+
+  const handleYearsOfExperienceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setYearsOfExperience(parseInt(event.target.value, 10));
+  };
+
   const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -25,7 +50,16 @@ const RegisterPage = () => {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, username, password }),
+      body: JSON.stringify({
+        email,
+        username,
+        password,
+        isAdvisor,
+        name,
+        specialities,
+        ratePerHour,
+        yearsOfExperience
+      }),
     });
     console.log(response);
     if (response.ok) {
@@ -48,7 +82,7 @@ const RegisterPage = () => {
           registered.
         </div>
       )}
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen">
         <a
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
@@ -116,6 +150,118 @@ const RegisterPage = () => {
                   required
                 />
               </div>
+              <div className="relative">
+                <label
+                  htmlFor="userType"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  User Type
+                </label>
+                <div className="relative">
+                  <select
+                    value={isAdvisor ? "Financial Advisor" : "User"}
+                    onChange={handleUserTypeChange}
+                    name="userType"
+                    id="userType"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 appearance-none hover:cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option value="User">User</option>
+                    <option value="Financial Advisor">Financial Advisor</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                    <svg
+                      className="w-5 h-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              {isAdvisor &&
+                <>
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Name
+                    </label>
+                    <input
+                      value={name}
+                      onChange={handleNameChange}
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder="Your Name"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="specialities"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Specialities (separate with comma)
+                    </label>
+                    <input
+                      value={specialities}
+                      onChange={handleSpecialitiesChange}
+                      type="text"
+                      name="specialities"
+                      id="specialities"
+                      placeholder="Stocks, Money Market, Debt"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="ratePerHour"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Rate per Hour
+                    </label>
+                    <input
+                      value={ratePerHour}
+                      onChange={handleRatePerHourChange}
+                      type="number"
+                      name="ratePerHour"
+                      id="ratePerHour"
+                      placeholder="1000,00"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="yearsOfExperience"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Years of Experience
+                    </label>
+                    <input
+                      value={yearsOfExperience}
+                      onChange={handleYearsOfExperienceChange}
+                      type="number"
+                      name="yearsOfExperience"
+                      id="yearsOfExperience"
+                      placeholder="10"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                </>
+              }
 
               <button
                 type="submit"
