@@ -13,9 +13,9 @@ model User {
   email        String?       @unique
   password     String
   username     String        @unique
+  appointments Appointment[]
   budget       Budget?
   expenses     Expense[]
-  appointments Appointment[]
   transactions Transaction[]
 
   @@map("users")
@@ -45,27 +45,27 @@ model FinancialAdvisor {
   specialties        String[]
   email              String        @unique
   ratePerHour        Float
+  bio                String?
+  image              String?
+  yearsOfExperience  Int?
   appointments       Appointment[]
   availableSchedules Schedule[]
   transactions       Transaction[]
-  image              String?
-  bio                String?
-  yearsOfExperience  Int?
 }
 
 model Appointment {
   id        String           @id @default(cuid())
-  dateTime  DateTime
   userId    String
   advisorId String
+  dateTime  DateTime
   advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
   user      User             @relation(fields: [userId], references: [id])
 }
 
 model Schedule {
   id        String           @id @default(cuid())
-  dateTime  DateTime
   advisorId String
+  dateTime  DateTime
   advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
 }
 
