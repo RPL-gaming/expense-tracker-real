@@ -21,24 +21,32 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const customer_email = decoded.email;
-  const advisor_id = body.advisorId;
   const advisor_email = body.advisorEmail;
   const advisor_name = body.advisorName;
-  const start_time = new Date(); // TODO: get start time from body
+  const schedule = body.schedule;
 
   try {
     const meetUrl = await createGoogleMeetEvent(
       customer_email,
       advisor_email,
       advisor_name,
-      start_time,
+        schedule,
     );
     if (meetUrl) {
       const newAppointment = await prisma.appointment.create({
         data: {
-          dateTime: start_time,
+          dateTime: schedule,
           userId: decoded.id,
           advisorId: body.advisorId,
+        },
+      });
+
+      await prisma.schedule.deleteMany({
+        where: {
+          AND: [
+            { id: body.scheduleId },
+            { advisorId: body.advisorId },
+          ],
         },
       });
 
