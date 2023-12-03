@@ -9,15 +9,13 @@ datasource db {
 }
 
 model User {
-  id           String            @id @default(cuid())
-  email        String?           @unique
+  id           String        @id @default(cuid())
+  email        String?       @unique
   password     String
-  username     String            @unique
-  isAdvisor    Boolean           @default(false)
+  username     String        @unique
   appointments Appointment[]
   budget       Budget?
   expenses     Expense[]
-  advisor      FinancialAdvisor?
   transactions Transaction[]
 
   @@map("users")
@@ -50,9 +48,7 @@ model FinancialAdvisor {
   bio                String?
   image              String?
   yearsOfExperience  Int?
-  userId             String        @unique
   appointments       Appointment[]
-  user               User          @relation(fields: [userId], references: [id])
   availableSchedules Schedule[]
   transactions       Transaction[]
 }
