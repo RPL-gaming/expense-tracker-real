@@ -31,9 +31,12 @@ function navbar () {
             <Link href={'/budget'} >
                 <li className='hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2'>Add Budget</li>
             </Link>
-            <Link href={'/'} >
-                <li className='hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2'>Chatbot</li>
+            <Link href={'/chat'} >
+                <li className='hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2'>Talk to Wiza</li>
             </Link>
+                <Link href={'/advisor'} >
+                    <li className='hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2'>Find an Advisor</li>
+                </Link>
             </ul>
         </div>
         <div className="navbar-end">

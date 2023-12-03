@@ -102,7 +102,7 @@ export function ChatWindow(props: {
       <form onSubmit={sendMessage} className="flex w-full flex-col">
         <div className="flex w-full mt-4">
           <input
-            className="grow mr-8 p-4 rounded text-black"
+            className="grow mr-8 p-4 rounded"
             value={input}
             placeholder={placeholder ?? "How do you buy stocks?"}
             onChange={handleInputChange}
