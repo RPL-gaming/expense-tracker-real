@@ -2,18 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-
-type Advisor = {
-  id: string;
-  name: string;
-  email: string;
-  specialties: string[];
-  ratePerHour: number;
-};
-
-type MeetingDetails = {
-  meetUrl: string;
-};
+import {
+  Advisor,
+  MeetingDetails,
+  AvailableSchedules,
+} from "@/interfaces/advisor";
+import AdvisorDetails from "@/components/AdvisorDetails";
+import ScheduleDropdown from "@/components/ScheduleDropdown";
+import MeetingModal from "@/components/MeetingModal";
+import AdvisorImage from "@/components/AdvisorImage";
+import advisorImage from "@/components/AdvisorImage";
 
 const AdvisorDetailPage = () => {
   const router = usePathname();
@@ -23,6 +21,9 @@ const AdvisorDetailPage = () => {
   const [meetingDetails, setMeetingDetails] = useState<MeetingDetails | null>(
     null,
   );
+  const [selectedSchedule, setSelectedSchedule] =
+    useState<AvailableSchedules | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const fetchAdvisor = async () => {
@@ -34,6 +35,7 @@ const AdvisorDetailPage = () => {
           }
           const data = await response.json();
           setAdvisor(data);
+          console.log(data);
         } catch (error) {
           console.error(error);
         }
@@ -44,7 +46,16 @@ const AdvisorDetailPage = () => {
     );
   }, [id]);
 
+  const handleSelectSchedule = (schedule: AvailableSchedules) => {
+    setSelectedSchedule(schedule);
+    setShowAlert(false);
+  };
+
   const handlePay = async () => {
+    if (!selectedSchedule) {
+      setShowAlert(true);
+      return;
+    }
     try {
       const response = await fetch("/api/midtrans", {
         method: "POST",
@@ -71,6 +82,8 @@ const AdvisorDetailPage = () => {
           advisorId: advisor?.id,
           advisorEmail: advisor?.email,
           advisorName: advisor?.name,
+          schedule: selectedSchedule?.dateTime,
+          scheduleId: selectedSchedule?.id,
         }),
       });
 
@@ -131,22 +144,45 @@ const AdvisorDetailPage = () => {
   }, [transactionToken]);
 
   if (!advisor) {
-    return <div>Loading...</div>;
+    return <div className="loading loading-dots loading-md"></div>;
   }
 
   return (
-    <div>
-      {meetingDetails && <div>Meeting URL: {meetingDetails.meetUrl}</div>}
-      <h1>Id: {id}</h1>
-      <h1>{advisor.name}</h1>
-      <h1>{advisor.email}</h1>
-      {advisor.specialties.map((specialty, index) => (
-        <h2 key={index}>{specialty}</h2>
-      ))}
-      <h1>Rp.{advisor.ratePerHour}</h1>
-      <button className="btn btn-primary" onClick={handlePay}>
-        Book Appointment
-      </button>
+    <div className="p-5 flex flex-col md:flex-row">
+      {advisor.image && (
+        <AdvisorImage image={advisor.image} name={advisor.name} />
+      )}
+      <div className="card bg-base-100 shadow-xl md:w-2/3">
+        <div className="card-body">
+          <AdvisorDetails advisor={advisor} />
+          <div className="divider"></div>
+          {showAlert && (
+            <div className="alert alert-info">
+              <div>
+                <span>Please select a schedule first.</span>
+              </div>
+            </div>
+          )}
+          <ScheduleDropdown
+            availableSchedules={advisor.availableSchedules}
+            onSelectSchedule={handleSelectSchedule}
+            scheduleButtonText={
+              selectedSchedule
+                ? new Date(selectedSchedule.dateTime).toLocaleString("id-ID")
+                : "Select Schedule"
+            }
+          />
+          <button className="btn btn-primary" onClick={handlePay}>
+            Book Appointment
+          </button>
+        </div>
+      </div>
+      {meetingDetails && (
+        <MeetingModal
+          meetingDetails={meetingDetails}
+          selectedSchedule={selectedSchedule}
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { isTokenValid } from '../../../../../../utils/auth/is-token-valid';
-import prisma from '../../../../../../lib/prisma';
-import { differenceInHours, parseISO } from 'date-fns';
+import { NextRequest, NextResponse } from "next/server";
+import { isTokenValid } from "../../../../../../utils/auth/is-token-valid";
+import prisma from "../../../../../../lib/prisma";
+import { differenceInHours, parseISO } from "date-fns";
 
 export async function POST(req: NextRequest) {
   if (req.headers.get("content-type") !== "application/json") {
@@ -36,10 +36,7 @@ export async function POST(req: NextRequest) {
 
   // Validate only advisor
   if (!isAdvisor) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 403 }
-    )
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
   // Find Advisor
@@ -49,12 +46,20 @@ export async function POST(req: NextRequest) {
   }
 
   // Check if new schedule clash with others
-  const schedules = await prisma.schedule.findMany({ where: { advisorId: user.id } });
+  const schedules = await prisma.schedule.findMany({
+    where: { advisorId: user.id },
+  });
   if (schedules) {
     for (let i = 0; i < schedules.length; i++) {
       // New Schedule is invalid if within 2 hours from existing schedule
-      if (Math.abs(differenceInHours(schedules[i].dateTime, new Date(dateTime))) < 2) {
-        return NextResponse.json({ error: "New schedule clash with existing schedule" }, { status: 400 });
+      if (
+        Math.abs(differenceInHours(schedules[i].dateTime, new Date(dateTime))) <
+        2
+      ) {
+        return NextResponse.json(
+          { error: "New schedule clash with existing schedule" },
+          { status: 400 },
+        );
       }
     }
   }
@@ -63,7 +68,7 @@ export async function POST(req: NextRequest) {
     const newSchedule = await prisma.schedule.create({
       data: {
         dateTime: new Date(dateTime),
-        advisorId: user.id
+        advisorId: user.id,
       },
     });
 

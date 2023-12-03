@@ -17,18 +17,27 @@ export async function POST(request: NextRequest) {
     name,
     specialities,
     ratePerHour,
-    yearsOfExperience
+    yearsOfExperience,
   } = await request.json();
 
   // Validate user input
-  if (!username || !password || !email || isAdvisor == undefined || isAdvisor == null) {
+  if (
+    !username ||
+    !password ||
+    !email ||
+    isAdvisor == undefined ||
+    isAdvisor == null
+  ) {
     return NextResponse.json(
       { error: "All fields are required" },
       { status: 400 },
     );
   }
-  
-  if (isAdvisor && (!name || !specialities || !ratePerHour || !yearsOfExperience)) {
+
+  if (
+    isAdvisor &&
+    (!name || !specialities || !ratePerHour || !yearsOfExperience)
+  ) {
     return NextResponse.json(
       { error: "All fields are required" },
       { status: 400 },
@@ -53,7 +62,7 @@ export async function POST(request: NextRequest) {
         username,
         email,
         password: hashedPassword,
-        isAdvisor
+        isAdvisor,
       },
     });
     if (isAdvisor) {
@@ -65,9 +74,9 @@ export async function POST(request: NextRequest) {
           email,
           ratePerHour,
           yearsOfExperience,
-          userId: newUser.id
-        }
-      })
+          userId: newUser.id,
+        },
+      });
     }
 
     return NextResponse.json({

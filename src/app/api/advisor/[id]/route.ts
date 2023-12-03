@@ -30,6 +30,9 @@ export async function GET(req: NextRequest) {
       where: {
         id: id,
       },
+      include: {
+        availableSchedules: true,
+      },
     });
 
     return NextResponse.json(advisor);

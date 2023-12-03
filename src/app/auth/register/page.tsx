@@ -23,7 +23,9 @@ const RegisterPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleUserTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleUserTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setIsAdvisor(event.target.value === "Financial Advisor");
   };
 
@@ -31,15 +33,21 @@ const RegisterPage = () => {
     setName(event.target.value);
   };
 
-  const handleSpecialitiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSpecialitiesChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSpecialities(event.target.value);
   };
 
-  const handleRatePerHourChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRatePerHourChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setRatePerHour(parseFloat(event.target.value));
   };
 
-  const handleYearsOfExperienceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYearsOfExperienceChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setYearsOfExperience(parseInt(event.target.value, 10));
   };
 
@@ -58,7 +66,7 @@ const RegisterPage = () => {
         name,
         specialities,
         ratePerHour,
-        yearsOfExperience
+        yearsOfExperience,
       }),
     });
     console.log(response);
@@ -186,7 +194,7 @@ const RegisterPage = () => {
                   </div>
                 </div>
               </div>
-              {isAdvisor &&
+              {isAdvisor && (
                 <>
                   <div>
                     <label
@@ -261,7 +269,7 @@ const RegisterPage = () => {
                     />
                   </div>
                 </>
-              }
+              )}
 
               <button
                 type="submit"
