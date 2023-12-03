@@ -2,29 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
-
-type Advisor = {
-  id: string;
-  name: string;
-  specialties: string[];
-  email: string;
-  ratePerHour: number;
-  bio: string;
-  image: string;
-  yearsOfExperience: number;
-  availableSchedules: availableSchedules[];
-};
-
-type availableSchedules = {
-  id: string;
-  advisorId: string;
-  dateTime: Date;
-};
-
-type MeetingDetails = {
-  meetUrl: string;
-};
+import {
+  Advisor,
+  MeetingDetails,
+  AvailableSchedules,
+} from "@/interfaces/advisor";
+import AdvisorDetails from "@/components/AdvisorDetails";
+import ScheduleDropdown from "@/components/ScheduleDropdown";
+import MeetingModal from "@/components/MeetingModal";
+import AdvisorImage from "@/components/AdvisorImage";
+import advisorImage from "@/components/AdvisorImage";
 
 const AdvisorDetailPage = () => {
   const router = usePathname();
@@ -35,12 +22,8 @@ const AdvisorDetailPage = () => {
     null,
   );
   const [selectedSchedule, setSelectedSchedule] =
-    useState<availableSchedules | null>(null);
+    useState<AvailableSchedules | null>(null);
   const [showAlert, setShowAlert] = useState(false);
-  const scheduleButtonText = selectedSchedule
-    ? new Date(selectedSchedule.dateTime).toLocaleString("id-ID")
-    : "Select Schedule";
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchAdvisor = async () => {
@@ -63,7 +46,7 @@ const AdvisorDetailPage = () => {
     );
   }, [id]);
 
-  const handleSelectSchedule = (schedule: availableSchedules) => {
+  const handleSelectSchedule = (schedule: AvailableSchedules) => {
     setSelectedSchedule(schedule);
     setShowAlert(false);
   };
@@ -107,7 +90,6 @@ const AdvisorDetailPage = () => {
       const data = await response.json();
       if (data.success) {
         setMeetingDetails(data.meetingDetails);
-        setShowModal(true);
       } else {
         console.error("Failed to create meeting");
       }
@@ -168,31 +150,12 @@ const AdvisorDetailPage = () => {
   return (
     <div className="p-5 flex flex-col md:flex-row">
       {advisor.image && (
-        <figure className="md:w-1/3 px-10 pt-10">
-          <img
-            src={advisor.image}
-            alt={advisor.name}
-            className="rounded-xl max-w-full h-auto"
-          />
-        </figure>
+        <AdvisorImage image={advisor.image} name={advisor.name} />
       )}
       <div className="card bg-base-100 shadow-xl md:w-2/3">
         <div className="card-body">
-          <h2 className="card-title">{advisor.name}</h2>
-          <p>
-            <strong>Specialties:</strong> {advisor.specialties.join(", ")}
-          </p>
-          <p>
-            <strong>Experience:</strong> {advisor.yearsOfExperience} years
-          </p>
-          <p>
-            <strong>Rate:</strong> IDR{" "}
-            {advisor.ratePerHour.toLocaleString("id-ID")} per hour
-          </p>
-          <p>{advisor.bio}</p>
-
+          <AdvisorDetails advisor={advisor} />
           <div className="divider"></div>
-
           {showAlert && (
             <div className="alert alert-info">
               <div>
@@ -200,71 +163,26 @@ const AdvisorDetailPage = () => {
               </div>
             </div>
           )}
-
-          <div className="flex justify-between items-center">
-            <div className="dropdown">
-              <strong className="ml-2">Schedule</strong>
-              <br></br>
-              <div tabIndex={0} className="btn m-1">
-                {scheduleButtonText}
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                {advisor.availableSchedules.map((schedule, index) => (
-                  <li key={index}>
-                    <a onClick={() => handleSelectSchedule(schedule)}>
-                      {new Date(schedule.dateTime).toLocaleString("id-ID")}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <button className="btn btn-primary" onClick={handlePay}>
-              Book Appointment
-            </button>
-          </div>
+          <ScheduleDropdown
+            availableSchedules={advisor.availableSchedules}
+            onSelectSchedule={handleSelectSchedule}
+            scheduleButtonText={
+              selectedSchedule
+                ? new Date(selectedSchedule.dateTime).toLocaleString("id-ID")
+                : "Select Schedule"
+            }
+          />
+          <button className="btn btn-primary" onClick={handlePay}>
+            Book Appointment
+          </button>
         </div>
-
-        {showModal && (
-          <dialog className="modal" open>
-            <div className="modal-box relative text-center p-8">
-              <h3 className="font-bold text-2xl mb-4 text-green-600">
-                Confirmed!
-              </h3>
-              <p className="text-lg font-semibold mb-2">Your Meeting Link</p>
-              <a
-                href={meetingDetails?.meetUrl || "meet.google.com/abc-def-ghi"}
-                className="text-blue-600 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {meetingDetails?.meetUrl || "meet.google.com/abc-def-ghi"}
-              </a>
-              <p className="my-4">
-                {new Date(selectedSchedule?.dateTime || "").toLocaleString(
-                  "id-ID",
-                )}
-              </p>
-              <p className="mb-6">
-                This meeting has been added to your calendar
-              </p>
-              <Link href="/advisor">
-                <button
-                  className="btn bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
-                  onClick={() => {
-                    setShowModal(false);
-                  }}
-                >
-                  Back to Find an Advisor
-                </button>
-              </Link>
-            </div>
-          </dialog>
-        )}
       </div>
+      {meetingDetails && (
+        <MeetingModal
+          meetingDetails={meetingDetails}
+          selectedSchedule={selectedSchedule}
+        />
+      )}
     </div>
   );
 };
