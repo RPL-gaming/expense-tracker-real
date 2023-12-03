@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
   // Create a JWT token
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, isAdvisor: user.isAdvisor },
     process.env.JWT_SECRET!,
     { expiresIn: "1h" },
   ); // You should use a more secure secret
