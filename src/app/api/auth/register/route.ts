@@ -9,10 +9,26 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
-  const { email, password, username } = await request.json();
+  const {
+    email,
+    password,
+    username,
+    isAdvisor,
+    name,
+    specialities,
+    ratePerHour,
+    yearsOfExperience
+  } = await request.json();
 
   // Validate user input
-  if (!username || !password || !email) {
+  if (!username || !password || !email || isAdvisor == undefined || isAdvisor == null) {
+    return NextResponse.json(
+      { error: "All fields are required" },
+      { status: 400 },
+    );
+  }
+  
+  if (isAdvisor && (!name || !specialities || !ratePerHour || !yearsOfExperience)) {
     return NextResponse.json(
       { error: "All fields are required" },
       { status: 400 },
@@ -37,8 +53,22 @@ export async function POST(request: NextRequest) {
         username,
         email,
         password: hashedPassword,
+        isAdvisor
       },
     });
+    if (isAdvisor) {
+      const specialitiesArr = specialities.split(/,\s*/);
+      await prisma.financialAdvisor.create({
+        data: {
+          name,
+          specialties: specialitiesArr,
+          email,
+          ratePerHour,
+          yearsOfExperience,
+          userId: newUser.id
+        }
+      })
+    }
 
     return NextResponse.json({
       id: newUser.id,
