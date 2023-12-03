@@ -48,6 +48,9 @@ model FinancialAdvisor {
   appointments       Appointment[]
   availableSchedules Schedule[]
   transactions       Transaction[]
+  image              String?
+  bio                String?
+  yearsOfExperience  Int?
 }
 
 model Appointment {
