@@ -8,9 +8,10 @@ function navbar() {
 
   const isLoginPage = pathname === "/auth/login";
   const isRegisterPage = pathname === "/auth/register";
+  const isHomePage = pathname === "/";
 
   // If on the login or register page, don't render the navbar
-  if (isLoginPage || isRegisterPage) {
+  if (isLoginPage || isRegisterPage || isHomePage) {
     return null;
   }
 
