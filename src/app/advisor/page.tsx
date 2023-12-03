@@ -3,6 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
+type CustomCSSProperties = React.CSSProperties & {
+  "--value": number;
+  "--thickness": string;
+};
+
 type Advisor = {
   id: string;
   name: string;
@@ -85,6 +90,13 @@ const AdvisorPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {advisors.map((advisor) => {
             const similarity = Math.round(advisor.similarity * 100);
+            const style: CustomCSSProperties = {
+              "--value": similarity,
+              "--thickness": "6px",
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+            };
             return (
               <div
                 key={advisor.id}
@@ -92,13 +104,7 @@ const AdvisorPage = () => {
               >
                 <div
                   className="radial-progress bg-neutral-100 text-primary-content"
-                  style={{
-                    "--value": similarity,
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    "--thickness": "6px",
-                  }}
+                  style={style}
                   role="progressbar"
                 >
                   <div
