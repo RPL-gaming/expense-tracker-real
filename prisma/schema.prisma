@@ -17,8 +17,8 @@ model User {
   appointments     Appointment[]
   budget           Budget?
   expenses         Expense[]
-  transactions     Transaction[]
   FinancialAdvisor FinancialAdvisor?
+  transactions     Transaction[]
 
   @@map("users")
 }
