@@ -33,7 +33,8 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
     const model = new ChatOpenAI({
-      temperature: 0.8,
+      temperature: 0.5,
+      topP: 0.5,
     });
     const outputParser = new BytesOutputParser();
     const chain = prompt.pipe(model).pipe(outputParser);
