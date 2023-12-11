@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { isAdvisor } from '../../../../utils/auth/isAdvisor';
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -26,8 +27,13 @@ const LoginPage = () => {
     console.log(data);
     if (response.ok) {
       setIsLoginStatus(true);
+      const advisor = await isAdvisor()
+      let path = "/expenses/view"
+      if (advisor) {
+        path = "/appointments/view"
+      }
       // delay redirect to allow for success alert to show
-      setTimeout(() => (window.location.href = "/expenses/view"), 1000);
+      setTimeout(() => (window.location.href = path), 1000);
     } else {
       setIsLoginStatus(false);
     }
