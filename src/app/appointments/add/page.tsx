@@ -8,8 +8,10 @@ export default function AppointmentsAdd() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     event.preventDefault();
     const response = await fetch("/api/advisor/schedule/add", {
       method: "POST",
@@ -22,8 +24,11 @@ export default function AppointmentsAdd() {
       setIsSuccess(true);
       setTimeout(() => router.push("/appointments/view"), 1000);
     } else {
-      setErrorMessages(["Failed to add schedule"]);
+      const res = await response.json()
+      const message = res.error
+      setErrorMessages(message ? [message] : ["Failed to add schedule"]);
     }
+    setLoading(false)
   };
 
   return (
@@ -38,14 +43,14 @@ export default function AppointmentsAdd() {
       )}
       {errorMessages.length > 0 && (
         <div
-          className="p-4 mb-4 text-sm rounded-lg bg-gray-800 text-red-400"
+          className="absolute w-full p-4 mb-4 text-sm rounded-lg bg-gray-800 text-red-400"
           role="alert"
         >
           <span className="font-medium">Error alert!</span>{" "}
           {errorMessages.join(", ")}
         </div>
       )}
-      <div className="flex flex-col w-full items-center justify-center py-8 px-4 mx-auto max-w-2xl h-full lg:py-20">
+      <div className="flex flex-col w-full items-center justify-center py-40 px-4 mx-auto max-w-2xl h-full lg:py-40">
         <h2 className="mb-4 text-xl font-bold text-white">
           Add a New Appointment
         </h2>
@@ -71,9 +76,11 @@ export default function AppointmentsAdd() {
           </div>
           <button
             type="submit"
-            className="w-full inline-flex items-center justify-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-purple-900 hover:bg-purple-800"
+            className="w-full h-[50px] inline-flex items-center justify-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-purple-900 hover:bg-purple-800"
           >
-            Add Appointment
+            {
+              !loading ? <p>Add Appointment</p> : <span className='loading scale-75' />
+            }
           </button>
         </form>
       </div>
