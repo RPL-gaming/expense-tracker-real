@@ -25,7 +25,7 @@ const AddExpensePage = () => {
     });
     if (response.ok) {
       setIsSuccess(true);
-      setTimeout(() => router.back(), 1000);
+      setTimeout(() => router.push("/expenses/view"), 1000);
     } else {
       setErrorMessages(["Failed to add expense"]);
     }

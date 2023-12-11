@@ -1,11 +1,5 @@
-import Image from "next/image";
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return (
-    <main className='flex justify-center items-center min-h-screen'>
-      <h1 className='text-5xl font-semibold'>
-        Spendwise
-      </h1>
-    </main>
-  );
+    redirect("/expenses/view");
 }
