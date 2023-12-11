@@ -1,19 +1,84 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
-  id            String       @default(cuid()) @id
-  name          String?
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  @@map(name: "users")
+  id               String            @id @default(cuid())
+  email            String?           @unique
+  password         String
+  username         String            @unique
+  isAdvisor        Boolean           @default(false)
+  appointments     Appointment[]
+  budget           Budget?
+  expenses         Expense[]
+  FinancialAdvisor FinancialAdvisor?
+  transactions     Transaction[]
+
+  @@map("users")
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  amount      Float
+  date        DateTime
+  category    String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Budget {
+  id     String   @id @default(cuid())
+  amount Float
+  userId String   @unique
+  date   DateTime
+  users  User     @relation(fields: [userId], references: [id])
+}
+
+model FinancialAdvisor {
+  id                 String        @id @default(cuid())
+  name               String
+  specialties        String[]
+  email              String        @unique
+  ratePerHour        Float
+  bio                String?
+  image              String?
+  yearsOfExperience  Int?
+  userId             String        @unique
+  appointments       Appointment[]
+  user               User          @relation(fields: [userId], references: [id])
+  availableSchedules Schedule[]
+  transactions       Transaction[]
+}
+
+model Appointment {
+  id        String           @id @default(cuid())
+  userId    String
+  advisorId String
+  dateTime  DateTime
+  advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
+}
+
+model Schedule {
+  id        String           @id @default(cuid())
+  advisorId String
+  dateTime  DateTime
+  advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
+}
+
+model Transaction {
+  id        String           @id @default(cuid())
+  amount    Float
+  status    String
+  userId    String
+  advisorId String
+  advisor   FinancialAdvisor @relation(fields: [advisorId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
 }
