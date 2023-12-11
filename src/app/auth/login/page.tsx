@@ -37,7 +37,7 @@ const LoginPage = () => {
     <section className="bg-gray-50 dark:bg-gray-900">
       {isLoginSuccess && (
         <div
-          className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          className="absolute w-full p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
           role="alert"
         >
           <span className="font-medium">Success alert!</span> You are now logged
