@@ -62,10 +62,10 @@ const EditExpensePage = () => {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-gray-900">
+    <section className="bg-gray-900">
       {isSuccess && (
         <div
-          className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          className="absolute w-full p-4 mb-4 text-sm rounded-lg bg-gray-800 text-green-400"
           role="alert"
         >
           <span className="font-medium">Success alert!</span> Expense edited.
@@ -73,15 +73,15 @@ const EditExpensePage = () => {
       )}
       {errorMessages.length > 0 && (
         <div
-          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          className="p-4 mb-4 text-sm rounded-lg bg-gray-800 text-red-400"
           role="alert"
         >
           <span className="font-medium">Error alert!</span>{" "}
           {errorMessages.join(", ")}
         </div>
       )}
-      <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+      <div className="py-8 px-4 mx-auto max-w-2xl lg:py-20">
+        <h2 className="mb-4 text-xl font-bold text-white">
           Edit an Expense
         </h2>
         <form onSubmit={handleSubmit}>
@@ -89,13 +89,13 @@ const EditExpensePage = () => {
             <div>
               <label
                 htmlFor="category"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Category
               </label>
               <select
                 id="category"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                className="border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
               >
@@ -110,7 +110,7 @@ const EditExpensePage = () => {
             <div className="w-full">
               <label
                 htmlFor="price"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Price
               </label>
@@ -118,7 +118,7 @@ const EditExpensePage = () => {
                 type="number"
                 name="price"
                 id="price"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                className="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
                 placeholder="Rp 30000"
                 required
                 value={amount}
@@ -128,7 +128,7 @@ const EditExpensePage = () => {
             <div>
               <label
                 htmlFor="date"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Date
               </label>
@@ -136,7 +136,7 @@ const EditExpensePage = () => {
                 type="date"
                 name="date"
                 id="date"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                className="border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
                 value={date.slice(0, 10)}
                 onChange={(event) => setDate(event.target.value)}
               />
@@ -144,14 +144,14 @@ const EditExpensePage = () => {
             <div className="sm:col-span-2">
               <label
                 htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Description
               </label>
               <textarea
                 id="description"
                 rows={8}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                className="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
                 placeholder="Your description here"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
@@ -160,7 +160,7 @@ const EditExpensePage = () => {
           </div>
           <button
             type="submit"
-            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-purple-200 dark:focus:ring-purple-900 hover:bg-purple-800"
+            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-purple-900 hover:bg-purple-800"
           >
             Edit Expense
           </button>

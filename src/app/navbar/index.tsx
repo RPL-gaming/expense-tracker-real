@@ -1,8 +1,10 @@
 "use client";
-import React, { use, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { isAdvisor } from '../../../utils/auth/isAdvisor';
+import { NavbarAdvisor } from './NavbarAdvisor';
 
 function navbar() {
   const pathname = usePathname();
@@ -23,6 +25,18 @@ function navbar() {
     }
   }
   , [isLoggedIn]);
+
+  const [advisor, setAdvisor] = useState<boolean>(false)
+
+  useEffect(() => {
+    isAdvisor().then((res) => {
+      setAdvisor(res)
+    })
+  }, [])
+
+  if (advisor) {
+    return <NavbarAdvisor />
+  }
 
   return (
     <div className="navbar bg-gray-800">
@@ -63,7 +77,7 @@ function navbar() {
       <div className="navbar-end">
         {/* add logout button */}
         <button
-            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mr-4"
+            className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center bg-red-600 hover:bg-red-700 focus:ring-red-800 mr-4"
           onClick={logout}
         >
           Logout
