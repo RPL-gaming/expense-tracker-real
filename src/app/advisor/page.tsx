@@ -42,7 +42,6 @@ const AdvisorPage = () => {
 
       const data = await response.json();
       setAdvisors(data);
-      console.log(data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -85,7 +84,17 @@ const AdvisorPage = () => {
       </form>
 
       {isLoading ? (
-        <span className="loading loading-dots loading-md"></span>
+          <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%"
+              }}
+          >
+            <span className="loading loading-dots loading-lg"></span>
+          </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {advisors.map((advisor) => {
@@ -103,7 +112,7 @@ const AdvisorPage = () => {
                 className="card bg-base-100 shadow-xl relative"
               >
                 <div
-                  className="radial-progress bg-neutral-100 text-primary-content"
+                  className="radial-progress bg-neutral-100 text-primary-content border-2"
                   style={style}
                   role="progressbar"
                 >
@@ -138,7 +147,7 @@ const AdvisorPage = () => {
                   </p>
                   <p>{advisor.bio}</p>
                   <div className="card-actions justify-end">
-                    <Link href={`/advisor/${advisor.id}`}>View Profile</Link>
+                    <Link href={`/advisor/${advisor.id}`} className="bg-primary p-3 rounded">View Profile</Link>
                   </div>
                 </div>
               </div>
