@@ -51,9 +51,7 @@ const AddExpensePage = () => {
         </div>
       )}
       <div className="flex flex-col justify-center py-8 px-4 mx-auto max-w-2xl h-full lg:py-20">
-        <h2 className="mb-4 text-xl font-bold text-white">
-          Add a New Expense
-        </h2>
+        <h2 className="mb-4 text-xl font-bold text-white">Add a New Expense</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div>

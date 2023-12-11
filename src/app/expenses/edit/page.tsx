@@ -81,9 +81,7 @@ const EditExpensePage = () => {
         </div>
       )}
       <div className="py-8 px-4 mx-auto max-w-2xl lg:py-20">
-        <h2 className="mb-4 text-xl font-bold text-white">
-          Edit an Expense
-        </h2>
+        <h2 className="mb-4 text-xl font-bold text-white">Edit an Expense</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div>

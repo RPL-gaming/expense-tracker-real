@@ -19,8 +19,7 @@ const RegisterPage = () => {
     if (isLoggedIn) {
       router.replace("/expenses/view");
     }
-  }
-  , [isLoggedIn]);
+  }, [isLoggedIn]);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);

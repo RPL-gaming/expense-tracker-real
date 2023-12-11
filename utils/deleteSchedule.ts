@@ -3,10 +3,10 @@ export async function deleteSchedule(id: string) {
     await fetch("/api/advisor/schedule/delete", {
       method: "DELETE",
       body: JSON.stringify({
-        id
-      })
-    })
+        id,
+      }),
+    });
   } catch {
-    return
+    return;
   }
 }

@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useAuth } from '@/contexts/AuthContext'
-import Link from 'next/link'
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export const NavbarAdvisor = () => {
-  const { logout } = useAuth()
+  const { logout } = useAuth();
   return (
     <div className="navbar bg-gray-800">
       <div className="navbar-start">
@@ -28,11 +28,11 @@ export const NavbarAdvisor = () => {
       </div>
       <div className="navbar-end"></div>
       <button
-            className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center bg-red-600 hover:bg-red-700 focus:ring-red-800 mr-4"
-          onClick={logout}
-        >
-          Logout
-        </button>
+        className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center bg-red-600 hover:bg-red-700 focus:ring-red-800 mr-4"
+        onClick={logout}
+      >
+        Logout
+      </button>
     </div>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -8,27 +8,27 @@ export default function AppointmentsAdd() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true)
+    setLoading(true);
     event.preventDefault();
     const response = await fetch("/api/advisor/schedule/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        dateTime: date
+        dateTime: date,
       }),
     });
     if (response.ok) {
       setIsSuccess(true);
       setTimeout(() => router.push("/appointments/view"), 1000);
     } else {
-      const res = await response.json()
-      const message = res.error
+      const res = await response.json();
+      const message = res.error;
       setErrorMessages(message ? [message] : ["Failed to add schedule"]);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   return (
@@ -54,7 +54,10 @@ export default function AppointmentsAdd() {
         <h2 className="mb-4 text-xl font-bold text-white">
           Add a New Appointment
         </h2>
-        <form onSubmit={handleSubmit} className='flex flex-col items-center py-8'>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center py-8"
+        >
           <div className="flex items-center gap-4">
             <label
               htmlFor="date"
@@ -69,8 +72,8 @@ export default function AppointmentsAdd() {
               className="border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               value={date}
               onChange={(event) => {
-                setDate(event.target.value)
-                console.log(event.target.value)
+                setDate(event.target.value);
+                console.log(event.target.value);
               }}
             />
           </div>
@@ -78,12 +81,14 @@ export default function AppointmentsAdd() {
             type="submit"
             className="w-full h-[50px] inline-flex items-center justify-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-purple-900 hover:bg-purple-800"
           >
-            {
-              !loading ? <p>Add Appointment</p> : <span className='loading scale-75' />
-            }
+            {!loading ? (
+              <p>Add Appointment</p>
+            ) : (
+              <span className="loading scale-75" />
+            )}
           </button>
         </form>
       </div>
     </section>
   );
-};
+}

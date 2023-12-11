@@ -11,7 +11,8 @@ import AdvisorDetails from "@/components/AdvisorDetails";
 import ScheduleDropdown from "@/components/ScheduleDropdown";
 import MeetingModal from "@/components/MeetingModal";
 import AdvisorImage from "@/components/AdvisorImage";
-import advisorImage from "@/components/AdvisorImage";
+import FailedModal from "@/components/FailedModal";
+import LoadingModal from "@/components/LoadingModal";
 
 const AdvisorDetailPage = () => {
   const router = usePathname();
@@ -24,6 +25,8 @@ const AdvisorDetailPage = () => {
   const [selectedSchedule, setSelectedSchedule] =
     useState<AvailableSchedules | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [paymentFailed, setPaymentFailed] = useState(false);
+  const [isCreatingMeeting, setIsCreatingMeeting] = useState(false);
 
   useEffect(() => {
     const fetchAdvisor = async () => {
@@ -35,7 +38,6 @@ const AdvisorDetailPage = () => {
           }
           const data = await response.json();
           setAdvisor(data);
-          console.log(data);
         } catch (error) {
           console.error(error);
         }
@@ -72,6 +74,7 @@ const AdvisorDetailPage = () => {
   };
 
   const handleCreateMeeting = async () => {
+    setIsCreatingMeeting(true);
     try {
       const response = await fetch("/api/meeting", {
         method: "POST",
@@ -95,6 +98,8 @@ const AdvisorDetailPage = () => {
       }
     } catch (error) {
       console.error("Error creating meeting:", error);
+    } finally {
+      setIsCreatingMeeting(false);
     }
   };
 
@@ -132,23 +137,38 @@ const AdvisorDetailPage = () => {
           console.log("payment pending", result);
         },
         onError: function (result: any) {
+          setPaymentFailed(true);
           console.log("payment error", result);
         },
         onClose: function () {
-          console.log(
-            "customer closed the popup without finishing the payment",
-          );
+          setPaymentFailed(true);
         },
       });
     }
   }, [transactionToken]);
 
+  const handleCloseModal = () => {
+    setPaymentFailed(false);
+  };
+
   if (!advisor) {
-    return <div className="loading loading-dots loading-md"></div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
   }
 
   return (
-    <div className="p-5 flex flex-col md:flex-row">
+    <div className="p-5 flex flex-col md:flex-row bg-gray-900">
       {advisor.image && (
         <AdvisorImage image={advisor.image} name={advisor.name} />
       )}
@@ -183,6 +203,8 @@ const AdvisorDetailPage = () => {
           selectedSchedule={selectedSchedule}
         />
       )}
+      {paymentFailed && <FailedModal onClose={handleCloseModal} />}
+      {isCreatingMeeting && <LoadingModal />}
     </div>
   );
 };
