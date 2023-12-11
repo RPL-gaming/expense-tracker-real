@@ -141,7 +141,7 @@ const AdvisorDetailPage = () => {
           console.log("payment error", result);
         },
         onClose: function () {
-          setPaymentFailed(true)
+          setPaymentFailed(true);
         },
       });
     }
@@ -153,18 +153,18 @@ const AdvisorDetailPage = () => {
 
   if (!advisor) {
     return (
-        <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%"
-            }}
-        >
-          <span className="loading loading-dots loading-lg"></span>
-        </div>
-    )
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
   }
 
   return (
@@ -204,7 +204,7 @@ const AdvisorDetailPage = () => {
         />
       )}
       {paymentFailed && <FailedModal onClose={handleCloseModal} />}
-      {isCreatingMeeting && <LoadingModal/>}
+      {isCreatingMeeting && <LoadingModal />}
     </div>
   );
 };
