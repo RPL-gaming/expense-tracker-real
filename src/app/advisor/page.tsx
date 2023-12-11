@@ -55,7 +55,7 @@ const AdvisorPage = () => {
   };
 
   return (
-    <div className="pt-7 dark:bg-gray-900 px-5">
+    <div className="pt-7 bg-gray-900 px-5">
       <div className="flex items-center flex-col mb-4">
         <div>
           <h2 className="text-3xl">Search a Financial Advisor</h2>
