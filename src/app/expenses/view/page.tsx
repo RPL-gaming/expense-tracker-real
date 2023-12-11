@@ -75,7 +75,7 @@ function ExpenseList() {
   };
 
   return (
-    <div className="pt-7 dark:bg-gray-900 px-5">
+    <div className="py-14 bg-gray-900 px-5">
       <div className="flex items-center flex-col mb-4">
         <div>
           <h2 className="text-3xl">Expense List</h2>
@@ -92,7 +92,7 @@ function ExpenseList() {
           </h2>
         </div>
       </div>
-      <div className="overflow-x-auto dark:bg-gray-800 rounded-lg">
+      <div className="overflow-x-auto bg-gray-800 rounded-lg">
         <Chart
           chartType="PieChart"
           data={generatePieChartData()}
