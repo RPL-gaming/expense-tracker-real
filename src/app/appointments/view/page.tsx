@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { getAppointments } from '../../../../utils/getAppointments'
-import { format } from 'date-fns'
-import { FaRegTrashAlt } from "react-icons/fa";
-import { deleteSchedule } from '../../../../utils/deleteSchedule';
+import { AppointmentCard } from './AppointmentCard';
 
-interface Appointment {
+export interface Appointment {
   id: string
   advisorId: string
   dateTime: string
@@ -23,13 +21,6 @@ export default function AppointmentsView() {
     .then(() => setLoading(false))
   }, [])
 
-  async function deleteAppointment(id: string) {
-    setLoading(true)
-    await deleteSchedule(id)
-    getAppointments().then((res: any) => setAppointments(res ? res : []))
-    .then(() => setLoading(false))
-  }
-
   return (
     <section className='flex flex-col py-20 items-center px-8'>
       <h1 className='text-3xl font-semibold'>
@@ -43,20 +34,10 @@ export default function AppointmentsView() {
           <p>You haven't made any appointment</p>
         }
         {appointments?.map((appointment) => (
-          <div className='w-[300px] relative p-4 bg-gray-700 rounded-xl'>
-            <p className=''>
-              {format(new Date(appointment.dateTime), 'EEEE, d MMMM yyyy')}
-            </p>
-            <p className='opacity-75'>
-              {format(new Date(appointment.dateTime), 'p')}
-            </p>
-            <button
-              onClick={() => deleteAppointment(appointment.id)}
-              className='absolute bottom-4 right-4 text-red-500'
-            >
-              <FaRegTrashAlt />
-            </button>
-          </div>
+          <AppointmentCard
+            appointment={appointment}
+            callback={() => getAppointments().then((res: any) => setAppointments(res ? res:[]))}
+          />
         ))
         }
       </div>
