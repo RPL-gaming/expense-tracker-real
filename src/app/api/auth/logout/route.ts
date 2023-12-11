@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   // Clear the JWT token from the cookies
   const response = NextResponse.json({ message: "Logged out successfully" });
 
-  response.cookies.delete("token")
+  response.cookies.delete("token");
 
   return response;
 }

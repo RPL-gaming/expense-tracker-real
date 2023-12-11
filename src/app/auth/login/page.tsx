@@ -2,6 +2,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
+import { isAdvisor } from "../../../../utils/auth/isAdvisor";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,18 +18,25 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await login(email, password);
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
-      router.replace("/expenses/view");
-    }
-  }
-  , [isLoggedIn]);
+    let path = "/expenses/view";
+    isAdvisor()
+      .then((res: boolean) => {
+        if (res) {
+          path = "/appointments/view";
+        }
+      })
+      .then(() => {
+        if (isLoggedIn) {
+          router.replace(path);
+        }
+      });
+  }, [isLoggedIn]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

@@ -16,10 +16,13 @@ export async function DELETE(req: NextRequest) {
 
   const userId = decoded.id;
   const isAdvisor = decoded.isAdvisor;
-  const { id } = await req.json()
+  const { id } = await req.json();
 
   if (!id) {
-    return NextResponse.json({ error: "Missing parameter ID" }, { status: 403 });
+    return NextResponse.json(
+      { error: "Missing parameter ID" },
+      { status: 403 },
+    );
   }
 
   // Validate only advisor
@@ -32,7 +35,7 @@ export async function DELETE(req: NextRequest) {
   if (!user) {
     return NextResponse.json({ error: "Advisor not found" }, { status: 404 });
   }
-  
+
   // Find Schedule
   const schedule = await prisma.schedule.findUnique({ where: { id } });
   if (!schedule) {

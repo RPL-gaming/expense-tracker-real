@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { redirect, usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { isAdvisor } from '../../../utils/auth/isAdvisor';
-import { NavbarAdvisor } from './NavbarAdvisor';
+import { isAdvisor } from "../../../utils/auth/isAdvisor";
+import { NavbarAdvisor } from "./NavbarAdvisor";
 
 function navbar() {
   const pathname = usePathname();
@@ -23,19 +23,18 @@ function navbar() {
     if (!isLoggedIn) {
       router.replace("/auth/login");
     }
-  }
-  , [isLoggedIn]);
+  }, [isLoggedIn]);
 
-  const [advisor, setAdvisor] = useState<boolean>(false)
+  const [advisor, setAdvisor] = useState<boolean>(false);
 
   useEffect(() => {
     isAdvisor().then((res) => {
-      setAdvisor(res)
-    })
-  }, [])
+      setAdvisor(res);
+    });
+  }, []);
 
   if (advisor) {
-    return <NavbarAdvisor />
+    return <NavbarAdvisor />;
   }
 
   return (
@@ -82,7 +81,6 @@ function navbar() {
         >
           Logout
         </button>
-        
       </div>
     </div>
   );
