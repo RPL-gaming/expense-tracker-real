@@ -1,7 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isAdvisor } from '../../../utils/auth/isAdvisor';
+import { NavbarAdvisor } from './NavbarAdvisor';
 
 function navbar() {
   const pathname = usePathname();
@@ -13,6 +15,18 @@ function navbar() {
   // If on the login or register page, don't render the navbar
   if (isLoginPage || isRegisterPage || isHomePage) {
     return null;
+  }
+
+  const [advisor, setAdvisor] = useState<boolean>(false)
+
+  useEffect(() => {
+    isAdvisor().then((res) => {
+      setAdvisor(res)
+    })
+  }, [])
+
+  if (advisor) {
+    return <NavbarAdvisor />
   }
 
   return (
