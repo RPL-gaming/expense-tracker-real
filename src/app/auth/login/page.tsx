@@ -1,9 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import React, { use, useEffect, useState } from "react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, errorMessage, isLoggedIn } = useAuth();
+  const router = useRouter();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -13,35 +17,36 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const [isLoginSuccess, setIsLoginStatus] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    console.log(data);
-    if (response.ok) {
-      setIsLoginStatus(true);
-      // delay redirect to allow for success alert to show
-      setTimeout(() => (window.location.href = "/expenses/view"), 1000);
-    } else {
-      setIsLoginStatus(false);
-    }
+    await login(email, password);
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/expenses/view");
+    }
+  }
+  , [isLoggedIn]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      {isLoginSuccess && (
+      {isLoggedIn && (
         <div
           className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
           role="alert"
         >
           <span className="font-medium">Success alert!</span> You are now logged
           in.
+        </div>
+      )}
+      {errorMessage && (
+        <div
+          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span className="font-medium">Error!</span> {errorMessage}
         </div>
       )}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">

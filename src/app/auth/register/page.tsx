@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +12,15 @@ const RegisterPage = () => {
   const [specialities, setSpecialities] = useState("");
   const [ratePerHour, setRatePerHour] = useState(0);
   const [yearsOfExperience, setYearsOfExperience] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/expenses/view");
+    }
+  }
+  , [isLoggedIn]);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -75,7 +86,9 @@ const RegisterPage = () => {
       // delay redirect to allow for success alert to show
       setTimeout(() => (window.location.href = "/auth/login"), 1000);
     } else {
+      const data = await response.json();
       setIsRegisterSuccess(false);
+      setErrorMessage(data.error);
     }
   };
 
@@ -88,6 +101,14 @@ const RegisterPage = () => {
         >
           <span className="font-medium">Success alert!</span> You are now
           registered.
+        </div>
+      )}
+      {errorMessage && (
+        <div
+          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span className="font-medium">Error!</span> {errorMessage}
         </div>
       )}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen">

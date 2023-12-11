@@ -1,19 +1,28 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 function navbar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const isLoginPage = pathname === "/auth/login";
   const isRegisterPage = pathname === "/auth/register";
-  const isHomePage = pathname === "/";
 
   // If on the login or register page, don't render the navbar
-  if (isLoginPage || isRegisterPage || isHomePage) {
+  if (isLoginPage || isRegisterPage) {
     return null;
   }
+
+  const { isLoggedIn, logout } = useAuth();
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.replace("/auth/login");
+    }
+  }
+  , [isLoggedIn]);
 
   return (
     <div className="navbar bg-gray-800">
@@ -51,7 +60,16 @@ function navbar() {
           </Link>
         </ul>
       </div>
-      <div className="navbar-end"></div>
+      <div className="navbar-end">
+        {/* add logout button */}
+        <button
+            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mr-4"
+          onClick={logout}
+        >
+          Logout
+        </button>
+        
+      </div>
     </div>
   );
 }
