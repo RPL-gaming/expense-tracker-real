@@ -7,7 +7,7 @@ import { isAdvisor } from "../../../../utils/auth/isAdvisor";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, errorMessage, isLoggedIn } = useAuth();
+  const { login, errorMessage, isLoggedIn, isAuthChecking } = useAuth();
   const router = useRouter();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,11 +32,11 @@ const LoginPage = () => {
         }
       })
       .then(() => {
-        if (isLoggedIn) {
+        if (isLoggedIn && !isAuthChecking) {
           router.replace(path);
         }
       });
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isAuthChecking]);
 
   return (
     <section className="bg-gray-900">

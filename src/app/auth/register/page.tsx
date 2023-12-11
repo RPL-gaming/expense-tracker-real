@@ -13,13 +13,13 @@ const RegisterPage = () => {
   const [ratePerHour, setRatePerHour] = useState(0);
   const [yearsOfExperience, setYearsOfExperience] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isAuthChecking } = useAuth();
   const router = useRouter();
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && !isAuthChecking) {
       router.replace("/expenses/view");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isAuthChecking]);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
