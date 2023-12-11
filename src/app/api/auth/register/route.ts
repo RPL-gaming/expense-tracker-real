@@ -18,6 +18,8 @@ export async function POST(request: NextRequest) {
     specialities,
     ratePerHour,
     yearsOfExperience,
+    image,
+    bio
   } = await request.json();
 
   // Validate user input
@@ -36,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   if (
     isAdvisor &&
-    (!name || !specialities || !ratePerHour || !yearsOfExperience)
+    (!name || !specialities || !ratePerHour || !yearsOfExperience || !image || !bio)
   ) {
     return NextResponse.json(
       { error: "All fields are required" },
@@ -75,6 +77,8 @@ export async function POST(request: NextRequest) {
           ratePerHour,
           yearsOfExperience,
           userId: newUser.id,
+          image,
+          bio
         },
       });
     }
