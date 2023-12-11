@@ -15,7 +15,7 @@ export const NavbarAdvisor = () => {
               Dashboard
             </li>
           </Link>
-          <Link href={"/appoinments/add"}>
+          <Link href={"/appointments/add"}>
             <li className="hover:bg-gray-900 hover:rounded-lg transition duration-75 ease-linear px-4 py-2">
               Add Appointment
             </li>

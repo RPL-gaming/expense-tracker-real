@@ -14,10 +14,13 @@ interface Appointment {
 
 export default function AppointmentsView() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    getAppointments().then((res: any) => setAppointments(res ? res : []))
+    setLoading(true)
+    getAppointments()
+    .then((res: any) => setAppointments(res ? res : []))
+    .then(() => setLoading(false))
   }, [])
 
   async function deleteAppointment(id: string) {
@@ -33,11 +36,14 @@ export default function AppointmentsView() {
         Appointments
       </h1>
       <div className='pt-10 flex flex-wrap gap-10 justify-center'>
-        {appointments?.length == 0 &&
+        {loading && 
+          <span className='loading py-10' />
+        }
+        {appointments?.length == 0 && !loading &&
           <p>You haven't made any appointment</p>
         }
         {appointments?.map((appointment) => (
-          <div className='relative p-4 bg-gray-700 rounded-xl'>
+          <div className='w-[300px] relative p-4 bg-gray-700 rounded-xl'>
             <p className=''>
               {format(new Date(appointment.dateTime), 'EEEE, d MMMM yyyy')}
             </p>
