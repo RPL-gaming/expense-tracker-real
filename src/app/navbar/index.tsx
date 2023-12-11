@@ -21,7 +21,7 @@ function navbar() {
   const { isLoggedIn, logout } = useAuth();
   useEffect(() => {
     if (!isLoggedIn) {
-      router.replace("/auth/login");
+      router.push("/auth/login");
     }
   }, [isLoggedIn]);
 

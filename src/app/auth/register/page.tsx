@@ -1,7 +1,5 @@
 "use client";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -10,16 +8,11 @@ const RegisterPage = () => {
   const [isAdvisor, setIsAdvisor] = useState(false);
   const [name, setName] = useState("");
   const [specialities, setSpecialities] = useState("");
+  const [image, setImage] = useState("");
+  const [bio, setBio] = useState("");
   const [ratePerHour, setRatePerHour] = useState(0);
   const [yearsOfExperience, setYearsOfExperience] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const { isLoggedIn } = useAuth();
-  const router = useRouter();
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.replace("/expenses/view");
-    }
-  }, [isLoggedIn]);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -61,6 +54,18 @@ const RegisterPage = () => {
     setYearsOfExperience(parseInt(event.target.value, 10));
   };
 
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setImage(event.target.value);
+  };
+  
+  const handleBioChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setBio(event.target.value);
+  };
+
   const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -77,6 +82,8 @@ const RegisterPage = () => {
         specialities,
         ratePerHour,
         yearsOfExperience,
+        image,
+        bio
       }),
     });
     console.log(response);
@@ -284,6 +291,42 @@ const RegisterPage = () => {
                       name="yearsOfExperience"
                       id="yearsOfExperience"
                       placeholder="10"
+                      className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="image"
+                      className="block mb-2 text-sm font-medium text-white"
+                    >
+                      Profile Image
+                    </label>
+                    <input
+                      value={image}
+                      onChange={handleImageChange}
+                      type="text"
+                      name="image"
+                      id="image"
+                      placeholder="https://to-image"
+                      className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="bio"
+                      className="block mb-2 text-sm font-medium text-white"
+                    >
+                      Bio
+                    </label>
+                    <input
+                      value={bio}
+                      onChange={handleBioChange}
+                      type="text"
+                      name="bio"
+                      id="bio"
+                      placeholder="I am an expert in stock market"
                       className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                       required
                     />
