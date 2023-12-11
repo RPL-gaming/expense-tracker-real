@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   // Initialize Midtrans client
   const snap = new MidtransClient.Snap({
-    isProduction: true, // Change to true in production environment
+    isProduction: false, // Change to true in production environment
     serverKey: process.env.MIDTRANS_SERVER_KEY,
   });
 
