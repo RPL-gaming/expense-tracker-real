@@ -4,18 +4,20 @@ import { useRouter } from "next/navigation";
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 interface AuthContextType {
-  isLoggedIn: boolean;
-  errorMessage: string;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+    isLoggedIn: boolean;
+    isAuthChecking: boolean; // New state to track if auth check is in progress
+    errorMessage: string;
+    login: (email: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
+    const router = useRouter();
 
   const login = async (email: string, password: string) => {
     try {
@@ -46,11 +48,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         headers: { "Content-Type": "application/json" },
       });
 
-      setIsLoggedIn(false);
-    } catch (error) {
-      setIsLoggedIn(false);
+            setIsLoggedIn(false);
+        } catch (error) {
+            setIsLoggedIn(false);
+        }
     }
-  };
+
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -60,24 +63,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           headers: { "Content-Type": "application/json" },
         });
 
-        if (response.ok) {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        setIsLoggedIn(false);
-      }
-    };
+                setIsLoggedIn(response.ok);
+            } catch (error) {
+                setIsLoggedIn(false);
+            } finally {
+                setIsAuthChecking(false); // Auth check completed
+            }
+        };
 
     checkAuth();
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ isLoggedIn, errorMessage, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={{ isLoggedIn, isAuthChecking, errorMessage, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);

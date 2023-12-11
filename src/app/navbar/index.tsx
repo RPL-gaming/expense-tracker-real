@@ -18,12 +18,13 @@ function navbar() {
     return null;
   }
 
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, isAuthChecking } = useAuth();
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !isAuthChecking) {
       router.replace("/auth/login");
     }
-  }, [isLoggedIn]);
+  }
+  , [isLoggedIn, isAuthChecking]);
 
   const [advisor, setAdvisor] = useState<boolean>(false);
 
